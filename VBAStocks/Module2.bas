@@ -1,0 +1,75 @@
+Attribute VB_Name = "Module2"
+Sub For_Loop_multiple_Yr_Tickers_combo_ws()
+
+'Create variables to hold Summary Table for all worksheets
+
+         Dim Ticker As String
+         Dim Stocks_Total_Volume As Double
+         Dim Price_Change_For_Yr As Double
+         Dim Percent_Change_For_Yr As Integer
+         Dim Summary_Table_Row As Double
+         Dim Year_Opening_Date_Price As Double
+         Dim Year_Closing_Date_Price As Double
+
+         For Each ws In Worksheets
+         Summary_Table_Row = 2
+         Stocks_Total_Volume = 0
+         LastRow = ws.Cells(Rows.Count, 1).End(xlUp).Row
+         Year_Opening_Date_Price = ws.Cells(2, 3)
+         For i = 2 To LastRow
+    
+'Searches for when next ticker is different and Values
+         If ws.Cells(i + 1, 1) <> ws.Cells(i, 1) Then
+            Ticker = ws.Cells(i, 1)
+            Stocks_Total_Volume = Stocks_Total_Volume + ws.Cells(i, 7)
+            Year_Closing_Date_Price = ws.Cells(i, 6)
+            Price_Change_For_Yr = Year_Closing_Date_Price - Year_Opening_Date_Price
+         If Year_Opening_Date_Price = 0 Then
+                Percent_Change_For_Yr = 0
+         Else
+             Percent_Change_For_Yr = Price_Change_For_Yr / Year_Opening_Date_Price * 100
+         End If
+        
+'Insert Values into Summary Table
+         ws.Range("I" & Summary_Table_Row).Value = Ticker
+         ws.Range("J" & Summary_Table_Row).Value = Price_Change_For_Yr
+         ws.Range("K" & Summary_Table_Row).Value = Percent_Change_For_Yr
+         ws.Range("L" & Summary_Table_Row).Value = Stocks_Total_Volume
+            
+         Stocks_Total_Volume = 0
+         Year_Opening_Date_Price = ws.Cells(i + 1, 3)
+
+'Conditionally highlight Positive Yearly Price Changes in Green and Negative Change in red
+         If ws.Range("J" & Summary_Table_Row).Value >= 0 Then
+            ws.Range("J" & Summary_Table_Row).Interior.Color = vbGreen
+             Else
+                ws.Range("J" & Summary_Table_Row).Interior.Color = vbRed
+         End If
+                     
+'Summary Table Row Output
+         Summary_Table_Row = Summary_Table_Row + 1
+         Else
+         Stocks_Total_Volume = Stocks_Total_Volume + ws.Cells(i, 7)
+        End If
+         
+    Next i
+    
+'Set Table Row Headers
+        ws.Cells(1, 9) = "Ticker"
+        ws.Cells(1, 10) = "Price Change for Year"
+        ws.Cells(1, 11) = "Percent Change for Year"
+        ws.Cells(1, 12) = "Stocks Total Volume"
+        
+Next ws
+
+End Sub
+
+Sub Clear_For_Loop_multiple_Yr_Tickers_combo_ws():
+
+For Each ws In Worksheets
+
+ws.Range("I:L").Clear
+
+Next ws
+
+End Sub
