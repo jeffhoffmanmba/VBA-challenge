@@ -1,4 +1,3 @@
-Attribute VB_Name = "Module2"
 Sub For_Loop_multiple_Yr_Tickers_combo_ws()
 
 'Create variables to hold Summary Table for all worksheets
