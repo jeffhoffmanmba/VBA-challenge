@@ -6,7 +6,6 @@ Sub VBA_multiple_yr_stock_data()
          Dim Stocks_Total_Volume As Double
          Dim Price_Change_For_Yr As Double
          Dim Percent_Change_For_Yr As Integer
-         Dim Summary_Table_Row As Double
          Dim Year_Opening_Date_Price As Double
          Dim Year_Closing_Date_Price As Double
 
